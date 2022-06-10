@@ -6,7 +6,7 @@ Script to rename photos in a folder based on EXIF data:
 
 import os
 import sys
-from typing import NamedTuple
+from typing import NamedTuple, Generator
 import exifread
 from geopy import Nominatim
 
@@ -23,11 +23,11 @@ def get_working_dir() -> str:
     wdir = sys.argv[1:]
     return wdir[0] if wdir else os.getcwd()
 
-def get_photo_files(wdir: str) -> list[str]:
+def get_photo_files(wdir: str) -> Generator[str, None, None]:
     """ Get list of photo files in workdir """
     file_names = os.listdir(wdir)
     photo_extensions = ('.jpg', '.jpeg', '.heic')
-    return [f for f in file_names if f.lower().endswith(photo_extensions)]
+    return (f for f in file_names if f.lower().endswith(photo_extensions))
 
 def get_exif_data(photo: str) -> dict:
     """ Get EXIF data from photo file """
